@@ -1,0 +1,129 @@
+<div class="dashboard">
+  <div *ngIf="tasks && tasks.length > 0">
+    <!-- Metrics Section -->
+    <div class="metrics">
+      <mat-grid-list cols="3" rowHeight="150px" gutterSize="16px">
+        <mat-grid-tile
+          *ngFor="let metric of metrics"
+          [colspan]="1"
+          [rowspan]="1"
+        >
+          <mat-card class="metric-card" [ngClass]="metric.colorClass">
+            <mat-card-title class="metric-title">{{
+              metric.title
+            }}</mat-card-title>
+            <mat-card-content>
+              <h2 class="metric-value">{{ metric.value }}</h2>
+              <span class="metric-description">{{ metric.description }}</span>
+            </mat-card-content>
+          </mat-card>
+        </mat-grid-tile>
+      </mat-grid-list>
+    </div>
+
+    <!-- Analytics Section -->
+    <div class="analytics">
+      <mat-card>
+        <mat-card-title>Task Completion Overview</mat-card-title>
+        <mat-card-content>
+          <canvas id="analyticsChart"></canvas>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <!-- Task Table Section -->
+    <div class="task-table">
+      <mat-card>
+        <mat-card-title>Recent Tasks</mat-card-title>
+        <!-- Filters Section -->
+        <div class="filters">
+          <mat-form-field appearance="outline" class="filter">
+            <mat-label>Filter by Status</mat-label>
+            <mat-select
+              [(ngModel)]="selectedStatus"
+              (selectionChange)="applyFilter()"
+            >
+              <mat-option *ngFor="let status of statuses" [value]="status">
+                {{ status }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="filter">
+            <mat-label>Filter by Category</mat-label>
+            <mat-select
+              [(ngModel)]="selectedCategory"
+              (selectionChange)="applyFilter()"
+            >
+              <mat-option
+                *ngFor="let category of categories"
+                [value]="category"
+              >
+                {{ category }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <mat-card-content>
+          <table
+            mat-table
+            [dataSource]="filteredTasks"
+            class="mat-elevation-z8"
+          >
+            <!-- Task Name Column -->
+            <ng-container matColumnDef="name">
+              <th mat-header-cell *matHeaderCellDef>Task Name</th>
+              <td class="title" mat-cell *matCellDef="let task">
+                {{ task.title }}
+              </td>
+            </ng-container>
+
+            <!-- Status Column -->
+            <ng-container matColumnDef="status">
+              <th mat-header-cell *matHeaderCellDef>Status</th>
+              <td mat-cell *matCellDef="let task">{{ task.status }}</td>
+            </ng-container>
+
+            <!-- Category Column -->
+            <ng-container matColumnDef="category">
+              <th mat-header-cell *matHeaderCellDef>Category</th>
+              <td mat-cell *matCellDef="let task">{{ task.category }}</td>
+            </ng-container>
+
+            <!-- Deadline Column -->
+            <ng-container matColumnDef="deadline">
+              <th mat-header-cell *matHeaderCellDef>Deadline</th>
+              <td mat-cell *matCellDef="let task">
+                {{ task.end | date : "MMM d, y" }} at
+                {{ task.end | date : "HH:mm:ss" }}
+              </td>
+            </ng-container>
+
+            <!-- Action Column -->
+            <!-- To be implemented at a later date -->
+            <!-- <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef>Actions</th>
+            <td mat-cell *matCellDef="let task">
+              <button mat-icon-button color="primary">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-icon-button color="warn">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </td>
+          </ng-container> -->
+
+            <!-- Header and Row Declarations -->
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+          </table>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+
+  <div *ngIf="!tasks || tasks.length === 0" class="empty-state">
+    <p>You don't have any tasks yet.</p>
+  </div>
+</div>

@@ -1,0 +1,71 @@
+<mat-card class="login-card">
+  <div *ngIf="httpError" class="error-message">
+    <p>{{ httpError }}</p>
+  </div>
+  <mat-card-title>Log In</mat-card-title>
+  <mat-card-content>
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <mat-form-field appearance="outline">
+        <mat-label>Enter your email</mat-label>
+        <input
+          formControlName="email"
+          matInput
+          type="email"
+          placeholder="johndoe@gmail.com"
+        />
+        <mat-error
+          *ngIf="(email?.errors?.['required'] || email?.errors?.['email'] ) && email?.invalid && (email?.dirty || email?.touched)"
+        >
+          Please enter a valid email address.
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Enter your password</mat-label>
+        <input
+          matInput
+          formControlName="password"
+          type="password"
+          placeholder="Password"
+        />
+        <mat-error
+          *ngIf="(password?.errors?.['required'] || password?.errors?.['minlength']) && password?.invalid && (password?.dirty || password?.touched)"
+        >
+          Password must be at least 8 characters long.
+        </mat-error>
+      </mat-form-field>
+      <button
+        mat-raised-button
+        color="primary"
+        class="login-button"
+        [disabled]="loginForm.invalid"
+      >
+        Log In
+      </button>
+    </form>
+    <div class="divider">OR</div>
+
+    <button
+      (click)="loginWithGoogle()"
+      mat-raised-button
+      color="warn"
+      class="social-login-button"
+    >
+      <img src="google-icon.svg" class="social-icon" alt="Google Icon" />
+      Continue with Google
+    </button>
+    <!-- To be implemented later -->
+    <!-- <button
+      (click)="loginWithMicrosoft()"
+      mat-raised-button
+      color="primary"
+      class="social-login-button"
+    >
+      <img src="microsoft-icon.svg" class="social-icon" alt="microsoft Icon" />
+      Continue with Microsoft
+    </button> -->
+    <div class="signup-link">
+      <a routerLink="/sign-up">Don’t have an account? Sign up for free</a>
+    </div>
+  </mat-card-content>
+</mat-card>

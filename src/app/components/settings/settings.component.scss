@@ -1,0 +1,70 @@
+.settings-card {
+  width: 100%;
+  max-width: 40rem;
+  margin: 2rem auto;
+  padding: 0 1rem;
+
+  mat-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    mat-card-title {
+      font-size: 1rem;
+    }
+  }
+
+  .profile-pic {
+    display: flex;
+    justify-content: flex-end;
+    width: 3rem;
+    height: 3rem;
+
+    .profile-image {
+      height: inherit;
+      width: inherit;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .avatar-icon {
+      height: inherit;
+      width: inherit;
+      font-size: 3rem !important;
+      color: grey;
+    }
+  }
+
+  .settings-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    margin: 1rem 0;
+  }
+
+  .settings-field {
+    width: 100%;
+    margin-bottom: 16px;
+  }
+
+  mat-slide-toggle,
+  mat-checkbox {
+    margin-right: 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .settings-card {
+    width: 90%;
+  }
+}
+
+@media (max-width: 470px) {
+  .settings-card {
+    .analytics,
+    .metrics {
+      display: none;
+    }
+  }
+}

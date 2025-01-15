@@ -1,0 +1,42 @@
+<header>
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <span class="navbar-title">Task Manager</span>
+    </div>
+    <ul
+      class="navbar-links"
+      [ngClass]="{
+        open: isSidenavOpen,
+      }"
+      [ngStyle]="{
+        'background-color': getBodyBgColor()
+      }"
+    >
+      <li
+        *ngFor="let item of menuItems; trackBy: utilService.trackById"
+        (click)="closeSidebar()"
+      >
+        <a
+          *ngIf="!item.authRequired && !(loggedIn$ | async)"
+          [routerLink]="item.link"
+          routerLinkActive="activebutton"
+          ariaCurrentWhenActive="page"
+        >
+          {{ item.label }}
+        </a>
+
+        <a
+          *ngIf="item.authRequired && (loggedIn$ | async)"
+          [routerLink]="item.link"
+          routerLinkActive="activebutton"
+          ariaCurrentWhenActive="page"
+        >
+          {{ item.label }}
+        </a>
+      </li>
+    </ul>
+    <button id="menuToggle" class="menu-toggle" (click)="toggleSidenav()">
+      {{ isSidenavOpen ? "✖" : "☰" }}
+    </button>
+  </nav>
+</header>

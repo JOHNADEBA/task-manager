@@ -1,0 +1,89 @@
+<div *ngIf="task" class="modal-overlay" (click)="onClose()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div *ngIf="httpError" class="error-message">
+      <p>{{ httpError }}</p>
+    </div>
+
+    <h2>{{ isEditMode ? "Edit Task" : "Add Task" }}</h2>
+    <form (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="title">Title</label>
+        <input
+          id="title"
+          type="text"
+          [(ngModel)]="task.title"
+          name="title"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="description">Description</label>
+        <textarea
+          id="description"
+          [(ngModel)]="task.description"
+          name="description"
+          rows="3"
+        ></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="status">Status</label>
+        <input
+          id="status"
+          type="text"
+          [(ngModel)]="task.status"
+          name="status"
+          required
+          readonly
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="startTime">Start Time</label>
+        <input
+          id="startTime"
+          type="datetime-local"
+          [(ngModel)]="formattedStart"
+          name="startTime"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="endTime">End Time</label>
+        <input
+          id="endTime"
+          type="datetime-local"
+          [(ngModel)]="formattedEnd"
+          name="endTime"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="category">Category</label>
+        <select
+          id="category"
+          [(ngModel)]="task.category"
+          name="category"
+          required
+        >
+          <option
+            *ngFor="let category of categories; trackBy: utilService.trackById"
+            [value]="category.value"
+          >
+            {{ category.label }}
+          </option>
+        </select>
+      </div>
+
+      <div class="modal-actions">
+        <button type="submit" class="btn save">Save</button>
+        <button type="button" class="btn cancel" (click)="onClose()">
+          Cancel
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

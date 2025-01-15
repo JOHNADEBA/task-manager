@@ -1,0 +1,110 @@
+<mat-card *ngIf="authService.getUser$() | async as user" class="settings-card">
+  <mat-card-header>
+    <div *ngIf="httpError" class="error-message">
+      <p>{{ httpError }}</p>
+    </div>
+
+    <mat-card-title>Settings</mat-card-title>
+    <!-- Profile Picture on the Right -->
+    <div class="profile-pic">
+      <img
+        *ngIf="user?.picture; else defaultAvatar"
+        [src]="user.picture"
+        alt="Profile Picture"
+        class="profile-image"
+      />
+      <ng-template #defaultAvatar>
+        <mat-icon class="avatar-icon">account_circle</mat-icon>
+      </ng-template>
+    </div>
+  </mat-card-header>
+
+  <mat-card-content>
+    <form [formGroup]="settingsForm">
+      <!-- Dark Mode & Notifications -->
+      <div class="settings-row">
+        <mat-slide-toggle formControlName="isDarkMode">
+          Dark Mode
+        </mat-slide-toggle>
+        <mat-checkbox formControlName="isPromotionalEmails">
+          Receive email notifications
+        </mat-checkbox>
+      </div>
+
+      <!-- Language Selection -->
+      <mat-form-field appearance="outline" class="settings-field">
+        <mat-label>Language</mat-label>
+        <mat-select formControlName="lang">
+          <mat-option value="en">English</mat-option>
+          <mat-option value="es">Español</mat-option>
+          <mat-option value="fr">Français</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <!-- User Name -->
+      <mat-form-field appearance="outline" class="settings-field">
+        <mat-label>Full Name</mat-label>
+        <input matInput formControlName="fullName" [value]="user?.fullName" />
+        <mat-error
+          *ngIf="(this.settingsForm.get('fullName')?.errors?.['invalidFullName']) && this.settingsForm.get('fullName')?.invalid && (this.settingsForm.get('fullName')?.dirty || this.settingsForm.get('fullName')?.touched)"
+        >
+          Full name must be at least 2 names, each with a min of 3 characters..
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Change Password Toggle -->
+      <button mat-button type="button" (click)="togglePasswordFields()">
+        {{ showPasswordFields ? "Cancel Password Change" : "Change Password" }}
+      </button>
+
+      <!-- Password Fields (Visible Only When Toggled) -->
+      <div *ngIf="showPasswordFields">
+        <mat-form-field appearance="outline" class="settings-field">
+          <mat-label>Current Password</mat-label>
+          <input matInput type="password" formControlName="currentPassword" />
+          <mat-error
+            *ngIf="(this.settingsForm.get('currentPassword')?.errors?.['minlength']) && this.settingsForm.get('currentPassword')?.invalid && (this.settingsForm.get('currentPassword')?.dirty || this.settingsForm.get('currentPassword')?.touched)"
+          >
+            Current password must be at least 8 characters long.
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="settings-field">
+          <mat-label>New Password</mat-label>
+          <input matInput type="password" formControlName="newPassword" />
+          <mat-error
+            *ngIf="(this.settingsForm.get('newPassword')?.errors?.['minlength']) && this.settingsForm.get('newPassword')?.invalid && (this.settingsForm.get('newPassword')?.dirty || this.settingsForm.get('newPassword')?.touched)"
+          >
+            New password must be at least 8 characters long.
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="settings-field">
+          <mat-label>Confirm Password</mat-label>
+          <input matInput type="password" formControlName="confirmPassword" />
+          <mat-error
+            *ngIf="
+              settingsForm.hasError('passwordMismatch') &&
+              settingsForm.get('confirmPassword')?.touched
+            "
+          >
+            Passwords must match.
+          </mat-error></mat-form-field
+        >
+      </div>
+    </form>
+  </mat-card-content>
+
+  <mat-card-actions>
+    <button
+      mat-button
+      [disabled]="isSaveButtonDisabled()"
+      (click)="saveSettings()"
+    >
+      Save
+    </button>
+    <button mat-button (click)="cancelSettings()">Cancel</button>
+    <button mat-button color="warn" (click)="logout()">Logout</button>
+    <button mat-button color="warn" (click)="deleteAccount()">
+      Delete Account
+    </button>
+  </mat-card-actions>
+</mat-card>
