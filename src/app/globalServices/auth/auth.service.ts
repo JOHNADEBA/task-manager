@@ -90,14 +90,14 @@ export class AuthService {
   loginWithGoogle() {
     if (this.utilService.isBrowser()) {
       const authWindow = window.open(
-        'http://localhost:3000/auth/google',
+        `${this.apiUrl}/auth/google`,
         '_blank',
         'width=500,height=600'
       );
 
       // Listen for postMessage from the popup
       window.addEventListener('message', (event) => {
-        if (event.origin === 'http://localhost:3000') {
+        if (event.origin === this.apiUrl) {
           const userData = event.data;
 
           // Handle the tokens (e.g., store them in localStorage)
